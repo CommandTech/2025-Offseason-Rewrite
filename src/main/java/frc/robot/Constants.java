@@ -1,6 +1,8 @@
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Transform3d;
 
 public class Constants {
@@ -41,5 +43,36 @@ public class Constants {
                                                                 CAMERA_ROLL, 
                                                                 CAMERA_PITCH, 
                                                                 CAMERA_YAW));
+    }
+
+    public static final class GoalConstants {
+        public static final Transform2d ROBOT_ALGAE_OFFSET = new Transform2d();
+
+        public static final Pose2d BLUE_REEF_A = new Pose2d();
+        public static final Pose2d BLUE_REEF_B = new Pose2d();
+        public static final Pose2d BLUE_REEF_C = new Pose2d();
+        public static final Pose2d BLUE_REEF_D = new Pose2d();
+        public static final Pose2d BLUE_REEF_E = new Pose2d();
+        public static final Pose2d BLUE_REEF_F = new Pose2d();
+        public static final Pose2d BLUE_REEF_G = new Pose2d();
+        public static final Pose2d BLUE_REEF_H = new Pose2d();
+        public static final Pose2d BLUE_REEF_I = new Pose2d();
+        public static final Pose2d BLUE_REEF_J = new Pose2d();
+        public static final Pose2d BLUE_REEF_K = new Pose2d();
+        public static final Pose2d BLUE_REEF_L = new Pose2d();
+        
+        //Can probably do math to flip it around but for right now hard coded is fine
+        public static final Pose2d RED_REEF_A = new Pose2d();
+        public static final Pose2d RED_REEF_B = new Pose2d();
+        public static final Pose2d RED_REEF_C = new Pose2d();
+        public static final Pose2d RED_REEF_D = new Pose2d();
+        public static final Pose2d RED_REEF_E = new Pose2d();
+        public static final Pose2d RED_REEF_F = new Pose2d();
+        public static final Pose2d RED_REEF_G = new Pose2d();
+        public static final Pose2d RED_REEF_H = new Pose2d();
+        public static final Pose2d RED_REEF_I = new Pose2d();
+        public static final Pose2d RED_REEF_J = new Pose2d();
+        public static final Pose2d RED_REEF_K = new Pose2d();
+        public static final Pose2d RED_REEF_L = new Pose2d();
     }
 }

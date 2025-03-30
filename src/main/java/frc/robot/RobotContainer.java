@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.Constants.GoalConstants;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Vision;
 
@@ -28,6 +29,7 @@ public class RobotContainer {
   public void configureButtonBindings() {
     // Configure your button bindings here
     
+    m_manipController.a().onTrue(m_swerve.goToPose(GoalConstants.BLUE_REEF_A,true));
   }
 
   public Command getAutonomousCommand() {

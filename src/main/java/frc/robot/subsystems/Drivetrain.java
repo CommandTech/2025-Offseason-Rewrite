@@ -13,6 +13,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.networktables.StructPublisher;
@@ -24,11 +25,13 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.path.PathConstraints;
 import com.studica.frc.AHRS;
 import com.studica.frc.AHRS.NavXComType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.GoalConstants;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 
 /** Represents a swerve drive style drivetrain. */
@@ -198,5 +201,19 @@ public class Drivetrain extends SubsystemBase {
 
   public Command driveCommand(double xSpeed, double ySpeed, double rot){
     return runOnce(() -> drive(xSpeed, ySpeed, rot, true, 0.02));
+  }
+
+  public Command goToPose(Pose2d targetPose, boolean forAlgae){
+    // Create the constraints to use while pathfinding
+    PathConstraints constraints = new PathConstraints(
+            3.0, 4.0,
+            Units.degreesToRadians(540), Units.degreesToRadians(720));
+
+    // Since AutoBuilder is configured, we can use it to build pathfinding commands
+    Command pathfindingCommand = AutoBuilder.pathfindToPose(
+            forAlgae ? targetPose.plus(GoalConstants.ROBOT_ALGAE_OFFSET) : targetPose,
+            constraints
+    );
+    return pathfindingCommand;
   }
 }

@@ -8,7 +8,6 @@ import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -36,18 +35,16 @@ import edu.wpi.first.apriltag.AprilTagFieldLayout;
 
 /** Represents a swerve drive style drivetrain. */
 public class Drivetrain extends SubsystemBase {
-  public static final double kMaxSpeed = 3.0; // 3 meters per second
-  public static final double kMaxAngularSpeed = Math.PI; // 1/2 rotation per second
 
-  private final Translation2d m_frontLeftLocation = new Translation2d(0.381, 0.381);
-  private final Translation2d m_frontRightLocation = new Translation2d(0.381, -0.381);
-  private final Translation2d m_backLeftLocation = new Translation2d(-0.381, 0.381);
-  private final Translation2d m_backRightLocation = new Translation2d(-0.381, -0.381);
+  private final SwerveModule m_frontLeft = new SwerveModule(DriveConstants.FRONT_LEFT_DRIVE_MOTOR, DriveConstants.FRONT_LEFT_TURN_MOTOR, DriveConstants.FRONT_LEFT_ANGULAR_OFFSET);
+  private final SwerveModule m_frontRight = new SwerveModule(DriveConstants.FRONT_RIGHT_DRIVE_MOTOR, DriveConstants.FRONT_RIGHT_TURN_MOTOR, DriveConstants.FRONT_RIGHT_ANGULAR_OFFSET);
+  private final SwerveModule m_backLeft = new SwerveModule(DriveConstants.BACK_LEFT_DRIVE_MOTOR, DriveConstants.BACK_LEFT_TURN_MOTOR, DriveConstants.BACK_LEFT_ANGULAR_OFFSET);
+  private final SwerveModule m_backRight = new SwerveModule(DriveConstants.BACK_RIGHT_DRIVE_MOTOR, DriveConstants.BACK_RIGHT_TURN_MOTOR, DriveConstants.BACK_RIGHT_ANGULAR_OFFSET);
 
-  private final SwerveModule m_frontLeft = new SwerveModule(1, 2, 0, 1, 2, 3);
-  private final SwerveModule m_frontRight = new SwerveModule(3, 4, 4, 5, 6, 7);
-  private final SwerveModule m_backLeft = new SwerveModule(5, 6, 8, 9, 10, 11);
-  private final SwerveModule m_backRight = new SwerveModule(7, 8, 12, 13, 14, 15);
+  public static final double kFrontLeftChassisAngularOffset = -Math.PI / 2;
+  public static final double kFrontRightChassisAngularOffset = 0;
+  public static final double kBackLeftChassisAngularOffset = Math.PI;
+  public static final double kBackRightChassisAngularOffset = Math.PI / 2;
 
   private RobotConfig config;
 
@@ -69,7 +66,7 @@ public class Drivetrain extends SubsystemBase {
 
   private final SwerveDriveKinematics m_kinematics =
       new SwerveDriveKinematics(
-          m_frontLeftLocation, m_frontRightLocation, m_backLeftLocation, m_backRightLocation);
+          DriveConstants.FRONT_LEFT_LOCATION, DriveConstants.FRONT_RIGHT_LOCATION, DriveConstants.BACK_LEFT_LOCATION, DriveConstants.BACK_RIGHT_LOCATION);
 
   private final SwerveDrivePoseEstimator m_poseEstimator = new SwerveDrivePoseEstimator(m_kinematics, m_gyro.getRotation2d(), new SwerveModulePosition[] {
     m_frontLeft.getPosition(),
@@ -146,7 +143,7 @@ public class Drivetrain extends SubsystemBase {
                         xSpeed, ySpeed, rot, m_gyro.getRotation2d())
                     : new ChassisSpeeds(xSpeed, ySpeed, rot),
                 periodSeconds));
-    SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, kMaxSpeed);
+    SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, DriveConstants.MAX_SPEED);
     m_frontLeft.setDesiredState(swerveModuleStates[0]);
     m_frontRight.setDesiredState(swerveModuleStates[1]);
     m_backLeft.setDesiredState(swerveModuleStates[2]);

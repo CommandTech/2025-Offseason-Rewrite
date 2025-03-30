@@ -6,12 +6,14 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Vision;
 
 public class RobotContainer {
   private final CommandXboxController m_driverController = new CommandXboxController(0);
   private final CommandXboxController m_manipController = new CommandXboxController(1);
 
-  private final Drivetrain m_swerve = new Drivetrain();
+  private final Vision m_camera = new Vision();
+  private final Drivetrain m_swerve = new Drivetrain(m_camera);
 
   private SendableChooser<Command> m_chooser = new SendableChooser<>();
 

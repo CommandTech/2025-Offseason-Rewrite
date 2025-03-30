@@ -48,6 +48,8 @@ public class Drivetrain extends SubsystemBase {
 
   private RobotConfig config;
 
+  private Vision m_camera;
+
   //Might move to a vision subsystem if we get to that point
   private AprilTagFieldLayout fieldLayout;
   {
@@ -80,7 +82,8 @@ public class Drivetrain extends SubsystemBase {
   StructArrayPublisher<SwerveModuleState> swerveStates = NetworkTableInstance.getDefault()
   .getStructArrayTopic("Swerve Module States", SwerveModuleState.struct).publish();
 
-  public Drivetrain() {
+  public Drivetrain(Vision camera) {
+    this.m_camera = camera;
     try{
       config = RobotConfig.fromGUISettings();
     } catch (Exception e) {
@@ -117,7 +120,7 @@ public class Drivetrain extends SubsystemBase {
   public void periodic(){
     updateOdometry();
 
-    //updating network table values
+    m_poseEstimator.addVisionMeasurement(m_camera.getVisionPose().toPose2d(), m_camera.getTimestamp());
     robotPose.set(m_poseEstimator.getEstimatedPosition());
     swerveStates.set(getModuleStates());
   }

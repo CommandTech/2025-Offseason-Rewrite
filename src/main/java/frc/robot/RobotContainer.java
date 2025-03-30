@@ -6,8 +6,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.GoalConstants;
-import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.Vision;
+import frc.robot.subsystems.*;
 
 public class RobotContainer {
   private final CommandXboxController m_driverController = new CommandXboxController(0);
@@ -15,6 +14,9 @@ public class RobotContainer {
 
   private final Vision m_camera = new Vision();
   private final Drivetrain m_swerve = new Drivetrain(m_camera);
+  private final Elevator m_elevator = new Elevator();
+  private final Coral m_coral = new Coral();
+  private final Algae m_algae = new Algae();
 
   private SendableChooser<Command> m_chooser = new SendableChooser<>();
 

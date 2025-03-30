@@ -18,11 +18,11 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import frc.robot.Constants.DriveConstants;
 
 public class SwerveModule {
-    private final SparkMax m_drivingSparkMax;
-    private final SparkMax m_turningSparkMax;
+  private final SparkMax m_drivingSparkMax;
+  private final SparkMax m_turningSparkMax;
 
-    private final RelativeEncoder m_drivingEncoder;
-    private final AbsoluteEncoder m_turningEncoder;
+  private final RelativeEncoder m_drivingEncoder;
+  private final AbsoluteEncoder m_turningEncoder;
 
   private final SparkClosedLoopController m_drivingClosedLoopController;
   private final SparkClosedLoopController m_turningClosedLoopController;

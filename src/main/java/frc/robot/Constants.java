@@ -1,6 +1,7 @@
 package frc.robot;
 
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
+import com.revrobotics.spark.config.SoftLimitConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
@@ -13,20 +14,20 @@ import edu.wpi.first.math.util.Units;
 
 public class Constants {
     public static final class DriveConstants {
-        public static final int FRONT_LEFT_DRIVE_MOTOR = 1;
-        public static final int FRONT_LEFT_TURN_MOTOR = 2;
-        public static final int FRONT_RIGHT_DRIVE_MOTOR = 3;
-        public static final int FRONT_RIGHT_TURN_MOTOR = 4;
-        public static final int BACK_LEFT_DRIVE_MOTOR = 5;
-        public static final int BACK_LEFT_TURN_MOTOR = 6;
-        public static final int BACK_RIGHT_DRIVE_MOTOR = 7;
-        public static final int BACK_RIGHT_TURN_MOTOR = 8;
+        public static final int FRONT_LEFT_DRIVE_MOTOR_ID = 1;
+        public static final int FRONT_LEFT_TURN_MOTOR_ID = 2;
+        public static final int FRONT_RIGHT_DRIVE_MOTOR_ID = 3;
+        public static final int FRONT_RIGHT_TURN_MOTOR_ID = 4;
+        public static final int BACK_LEFT_DRIVE_MOTOR_ID = 5;
+        public static final int BACK_LEFT_TURN_MOTOR_ID = 6;
+        public static final int BACK_RIGHT_DRIVE_MOTOR_ID = 7;
+        public static final int BACK_RIGHT_TURN_MOTOR_ID = 8;
 
         public static final int DRIVE_CURRENT_LIMIT = 50;
         public static final int TURN_CURRENT_LIMIT = 20;
 
-        public static final double MAX_SPEED = 3.0; // 3 meters per second
-        public static final double MAX_ANGULAR_SPEED = Math.PI; // 1/2 rotation per second
+        public static final double MAX_SPEED = Units.feetToMeters(9.824);
+        public static final double MAX_ANGULAR_SPEED = Units.feetToMeters(Math.PI * Units.feetToMeters(1));
         
         public static final double TRACK_WIDTH = Units.inchesToMeters(25);
         public static final double WHEEL_BASE = Units.inchesToMeters(25);
@@ -54,7 +55,7 @@ public class Constants {
         public static final double DRIVE_P = 1;
         public static final double DRIVE_I = 0;
         public static final double DRIVE_D = 0;
-        public static final double DRIVE_FF = 1;
+        public static final double DRIVE_FF = 1 / DRIVE_WHEEL_FREE_SPEED;
         
         public static final double TURN_P = 1;
         public static final double TURN_I = 0;
@@ -65,43 +66,33 @@ public class Constants {
         public static final SparkMaxConfig TURN_CONFIG = new SparkMaxConfig();
         
         static {
-            // Use module constants to calculate conversion factors and feed forward gain.
             double drivingFactor = WHEEL_RADIUS* 2 * Math.PI
                     / DRIVE_REDUCTION;
             double turningFactor = 2 * Math.PI;
-            double drivingVelocityFeedForward = 1 / DRIVE_WHEEL_FREE_SPEED;
 
             DRIVE_CONFIG
                     .idleMode(IdleMode.kBrake)
                     .smartCurrentLimit(DRIVE_CURRENT_LIMIT);
             DRIVE_CONFIG.encoder
-                    .positionConversionFactor(drivingFactor) // meters
-                    .velocityConversionFactor(drivingFactor / 60.0); // meters per second
+                    .positionConversionFactor(drivingFactor)
+                    .velocityConversionFactor(drivingFactor / 60.0);
             DRIVE_CONFIG.closedLoop
                     .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-                    // These are example gains you may need to them for your own robot!
-                    .pidf(DRIVE_P, DRIVE_I, DRIVE_D, DRIVE_FF)
-                    .velocityFF(drivingVelocityFeedForward)
+                    .pid(DRIVE_P, DRIVE_I, DRIVE_D)
+                    .velocityFF(DRIVE_FF)
                     .outputRange(-1, 1);
 
             TURN_CONFIG
                     .idleMode(IdleMode.kBrake)
                     .smartCurrentLimit(TURN_CURRENT_LIMIT);
             TURN_CONFIG.absoluteEncoder
-                    // Invert the turning encoder, since the output shaft rotates in the opposite
-                    // direction of the steering motor in the MAXSwerve Module.
                     .inverted(true)
-                    .positionConversionFactor(turningFactor) // radians
-                    .velocityConversionFactor(turningFactor / 60.0); // radians per second
+                    .positionConversionFactor(turningFactor)
+                    .velocityConversionFactor(turningFactor / 60.0);
             TURN_CONFIG.closedLoop
                     .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
-                    // These are example gains you may need to them for your own robot!
                     .pidf(TURN_P, TURN_I, TURN_D, TURN_FF)
                     .outputRange(-1, 1)
-                    // Enable PID wrap around for the turning motor. This will allow the PID
-                    // controller to go through 0 to get to the setpoint i.e. going from 350 degrees
-                    // to 10 degrees will go through 0 rather than the other direction which is a
-                    // longer route.
                     .positionWrappingEnabled(true)
                     .positionWrappingInputRange(0, turningFactor);
         }
@@ -159,5 +150,125 @@ public class Constants {
         public static final Pose2d RED_REEF_J = new Pose2d();
         public static final Pose2d RED_REEF_K = new Pose2d();
         public static final Pose2d RED_REEF_L = new Pose2d();
+    }
+
+    public static final class ElevatorConstants {
+        public static final int ELEVATOR_MOTOR_ID = 9;
+        public static final int ELEVATOR_CURRENT_LIMIT = 30;
+
+        public static final double ELEVATOR_MAX_HEIGHT = Units.inchesToMeters(80);
+        public static final double ELEVATOR_MIN_HEIGHT = Units.inchesToMeters(0);
+        public static final double ELEVATOR_STOW_HEIGHT = Units.inchesToMeters(1);
+
+        public static final double ELEVATOR_L1_HEIGHT = Units.inchesToMeters(10);
+        public static final double ELEVATOR_L2_HEIGHT = Units.inchesToMeters(20);
+        public static final double ELEVATOR_L3_HEIGHT = Units.inchesToMeters(30);
+
+        public static final double ELEVATOR_ALGAE_HIGH_HEIGHT = Units.inchesToMeters(40);
+        public static final double ELEVATOR_ALGAE_LOW_HEIGHT = Units.inchesToMeters(50);
+
+        public static final double ELEVATOR_HEIGHT_TOLERANCE = Units.inchesToMeters(1);
+
+        //good thing to look at for tuning
+        //https://docs.wpilib.org/en/stable/docs/software/advanced-controls/introduction/tuning-elevator.html
+        public static final double ELEVATOR_MAX_SPEED = Units.inchesToMeters(1);
+        public static final double ELEVATOR_MAX_ACCELERATION = Units.inchesToMeters(1);
+        public static final double ELEVATOR_P = 1;
+        public static final double ELEVATOR_I = 0;
+        public static final double ELEVATOR_D = 0;
+        public static final double ELEVATOR_FF = 0.5;
+        public static final double ELEVATOR_G = 0;
+        public static final double ELEVATOR_V = 0;
+        public static final double ELEVATOR_A = 0;
+
+        public static final double ELEVATOR_REDUCTION = 1;
+
+        public static final SparkMaxConfig ELEVATOR_CONFIG = new SparkMaxConfig();
+        static {
+            double elevatorFactor = 2 * Math.PI / ELEVATOR_REDUCTION;
+            ELEVATOR_CONFIG
+                .idleMode(IdleMode.kBrake)
+                .smartCurrentLimit(ELEVATOR_CURRENT_LIMIT);
+            ELEVATOR_CONFIG.encoder
+                .positionConversionFactor(elevatorFactor)
+                .velocityConversionFactor(elevatorFactor / 60.0);
+            ELEVATOR_CONFIG.closedLoop
+                .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+                .pid(ELEVATOR_P, ELEVATOR_I, ELEVATOR_D)
+                .velocityFF(ELEVATOR_FF)
+                .outputRange(-1, 1);
+        }
+    }
+
+    public static final class ClimberConstants {
+        public static final int PH_CAN_ID = 1;
+        public static final int COMP_START_PRESSURE = 100;
+        public static final int COMP_STOP_PRESSURE = 120;
+        public static final int HIGH_SIDE_PRESSURE_SENSOR_ID = 0;
+    }
+
+    public static final class AlgaeConstants {
+        public static final int PH_CAN_ID = 1;
+        public static final int ALGAE_STOPPER_RETRACT_CHANNEL = 4;
+        public static final int ALGAE_STOPPER_EXTEND_CHANNEL = 5;
+
+        public static final int TUSKS_MOTOR_ID = 10;
+        public static final SparkMaxConfig ALGAE_CONFIG = new SparkMaxConfig();
+        
+        public static final double TUSKS_MAX_HEIGHT = 0.660;
+        public static final double TUSKS_MIN_HEIGHT = 0.166;
+        public static final double AT_TARGET_THRESHOLD = 0.05;
+        public static final double HOME_POSITION = 0.660;
+        public static final double LOWER_POSITION = 0.166;
+        public static final double APPROACH_POSITION = 0.375;
+
+        public static final double TUSKS_P = 1;
+        public static final double TUSKS_I = 0;
+        public static final double TUSKS_D = 0;
+
+        static {
+            // Configure Current Limit
+            ALGAE_CONFIG.smartCurrentLimit(5);
+
+            // Configure integrated Encoder
+            ALGAE_CONFIG.encoder.positionConversionFactor(1).velocityConversionFactor(1);
+
+            // Configure Closed Loop Controller and MaxMotion
+            ALGAE_CONFIG
+                .closedLoop
+                .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+                .p(TUSKS_P)
+                .i(TUSKS_I)
+                .d(TUSKS_D)
+                .outputRange(-1, 1);
+            ALGAE_CONFIG
+                .closedLoop
+                .maxMotion
+                .maxVelocity(4800)
+                .maxAcceleration(4800)
+                .allowedClosedLoopError(AT_TARGET_THRESHOLD);
+
+            // Enable Brake Mode
+            ALGAE_CONFIG.idleMode(IdleMode.kBrake);
+            
+            SoftLimitConfig softLimits = new SoftLimitConfig();
+            softLimits
+                .forwardSoftLimit(TUSKS_MAX_HEIGHT)
+                .forwardSoftLimitEnabled(true)
+                .reverseSoftLimit(TUSKS_MIN_HEIGHT)
+                .reverseSoftLimitEnabled(true);
+            ALGAE_CONFIG.softLimit.apply(softLimits);
+        }
+    }
+
+    public static final class CoralConstants {
+        public static final int PH_CAN_ID = 1;
+        public static final int CORAL_STOPPER_EXTEND_CHANNEL = 6;
+        public static final int CORAL_STOPPER_RETRACT_CHANNEL = 7;
+        public static final int CORAL_SENSOR_ANALOG_PORT = 0;
+        public static final double CORAL_SENSE_THRESHOLD = 650;
+        public static final double AUTO_CORAL_SENCE_DELAY = 3;
+
+        
     }
 }

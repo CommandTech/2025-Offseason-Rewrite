@@ -202,4 +202,72 @@ public class Drivetrain extends SubsystemBase {
     );
     return pathfindingCommand;
   }
+
+  public Command goToClosestReef(boolean forAlgae){
+    Pose2d targetPose = getClosestBranch(forAlgae);
+    return goToPose(targetPose, forAlgae);
+  }
+
+  public Pose2d getClosestBranch(boolean forAlgae){
+    Pose2d currentPose = getPose();
+    Pose2d closestBranch = null;
+    double closestScore = Double.MAX_VALUE;
+    int closestTag = -1;
+    int[] tags = DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Blue ? GoalConstants.BLUE_TAGS : GoalConstants.RED_TAGS;
+    Pose2d[] branches = DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Blue ? GoalConstants.BLUE_BRANCHES : GoalConstants.RED_BRANCHES;
+    
+    for (int tag : tags){
+      Pose2d tagLocation = m_camera.getFieldLayout().getTagPose(tag).get().toPose2d();
+      double distance = currentPose.getTranslation().getDistance(tagLocation.getTranslation());
+
+      double angleDifference = Math.abs(currentPose.getRotation().getRadians() - tagLocation.getRotation().getRadians());
+      double score = distance + angleDifference; // Combine distance and rotation difference
+
+      if (score < closestScore) {
+        closestScore = score;
+        closestBranch = tagLocation;
+        closestTag = tag;
+      }
+    }
+
+    Pose2d[] selectbranches = new Pose2d[2];
+    switch (closestTag){
+      case 8:
+      case 17:
+        selectbranches = new Pose2d[]{branches[2], branches[3]};
+        break;
+      case 7:
+      case 18:
+        selectbranches = new Pose2d[]{branches[0], branches[1]};
+        break;
+      case 6:
+      case 19:
+        selectbranches = new Pose2d[]{branches[10], branches[11]};
+        break;
+      case 11:
+      case 20:
+        selectbranches = new Pose2d[]{branches[8], branches[9]};
+        break;
+      case 10:
+      case 21:
+        selectbranches = new Pose2d[]{branches[6], branches[7]};
+        break;
+      case 9:
+      case 22:
+        selectbranches = new Pose2d[]{branches[4], branches[5]};
+        break;
+    }
+
+    double closestDistance = Double.MAX_VALUE;
+    for (Pose2d branch : selectbranches){
+      double distance = currentPose.getTranslation().getDistance(branch.getTranslation());
+
+      if (distance < closestDistance) {
+        closestDistance = distance;
+        closestBranch = branch;
+      }
+    }
+
+    return closestBranch;
+  }
 }

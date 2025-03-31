@@ -6,6 +6,7 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Transform3d;
@@ -126,19 +127,26 @@ public class Constants {
     public static final class GoalConstants {
         public static final Transform2d ROBOT_ALGAE_OFFSET = new Transform2d();
 
-        public static final Pose2d BLUE_REEF_A = new Pose2d();
-        public static final Pose2d BLUE_REEF_B = new Pose2d();
-        public static final Pose2d BLUE_REEF_C = new Pose2d();
-        public static final Pose2d BLUE_REEF_D = new Pose2d();
-        public static final Pose2d BLUE_REEF_E = new Pose2d();
-        public static final Pose2d BLUE_REEF_F = new Pose2d();
-        public static final Pose2d BLUE_REEF_G = new Pose2d();
-        public static final Pose2d BLUE_REEF_H = new Pose2d();
-        public static final Pose2d BLUE_REEF_I = new Pose2d();
-        public static final Pose2d BLUE_REEF_J = new Pose2d();
-        public static final Pose2d BLUE_REEF_K = new Pose2d();
-        public static final Pose2d BLUE_REEF_L = new Pose2d();
+        // Starting at the side that points at the drive station and moving clockwise
+        public static final int[] BLUE_TAGS = new int[]{18, 19, 20, 21, 22, 17};
+        // Following the diagram in the game manual
+        public static final Pose2d BLUE_REEF_A = new Pose2d(0, 0, new Rotation2d());
+        public static final Pose2d BLUE_REEF_B = new Pose2d(1, 0, new Rotation2d());
+        public static final Pose2d BLUE_REEF_C = new Pose2d(2, 0, new Rotation2d());
+        public static final Pose2d BLUE_REEF_D = new Pose2d(3, 0, new Rotation2d());
+        public static final Pose2d BLUE_REEF_E = new Pose2d(4, 0, new Rotation2d());
+        public static final Pose2d BLUE_REEF_F = new Pose2d(5, 0, new Rotation2d());
+        public static final Pose2d BLUE_REEF_G = new Pose2d(6, 0, new Rotation2d());
+        public static final Pose2d BLUE_REEF_H = new Pose2d(7, 0, new Rotation2d());
+        public static final Pose2d BLUE_REEF_I = new Pose2d(8, 0, new Rotation2d());
+        public static final Pose2d BLUE_REEF_J = new Pose2d(9, 0, new Rotation2d());
+        public static final Pose2d BLUE_REEF_K = new Pose2d(10, 0, new Rotation2d());
+        public static final Pose2d BLUE_REEF_L = new Pose2d(11, 0, new Rotation2d());
         
+        public static final Pose2d[] BLUE_BRANCHES = new Pose2d[]{BLUE_REEF_A, BLUE_REEF_B, BLUE_REEF_C, BLUE_REEF_D, BLUE_REEF_E, BLUE_REEF_F, BLUE_REEF_G, BLUE_REEF_H, BLUE_REEF_I, BLUE_REEF_J, BLUE_REEF_K, BLUE_REEF_L};
+
+        // Starting at the side that points at the drive station and moving clockwise
+        public static final int[] RED_TAGS = new int[]{7, 6, 11, 10, 9, 8};
         //Can probably do math to flip it around but for right now hard coded is fine
         public static final Pose2d RED_REEF_A = new Pose2d();
         public static final Pose2d RED_REEF_B = new Pose2d();
@@ -152,6 +160,8 @@ public class Constants {
         public static final Pose2d RED_REEF_J = new Pose2d();
         public static final Pose2d RED_REEF_K = new Pose2d();
         public static final Pose2d RED_REEF_L = new Pose2d();
+
+        public static final Pose2d[] RED_BRANCHES = new Pose2d[]{RED_REEF_A, RED_REEF_B, RED_REEF_C, RED_REEF_D, RED_REEF_E, RED_REEF_F, RED_REEF_G, RED_REEF_H, RED_REEF_I, RED_REEF_J, RED_REEF_K, RED_REEF_L};
     }
 
     public static final class ElevatorConstants {

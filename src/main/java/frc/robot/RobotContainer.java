@@ -26,6 +26,7 @@ public class RobotContainer {
 
   public RobotContainer() {
     m_swerve.setDefaultCommand(m_swerve.driveCommand(m_driverController.getLeftX(), m_driverController.getLeftY(), m_driverController.getRightX()));
+    // m_swerve.setDefaultCommand(m_swerve.goToClosestReef(false));
     SmartDashboard.putData(CommandScheduler.getInstance());
     SmartDashboard.putData("Auto Mode", m_chooser);
 

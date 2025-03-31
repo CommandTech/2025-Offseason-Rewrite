@@ -44,18 +44,18 @@ public class Coral extends SubsystemBase {
   public void periodic() {
     if (coralStopped == false & isCoralSensed() == true & isAutoStopEnabled() == true
         && m_timer.hasElapsed(CoralConstants.AUTO_CORAL_SENCE_DELAY)) {
-      System.out.print("Coral Flume - Auto Stopped");
+      // System.out.print("Coral Flume - Auto Stopped");
       extendCoralStop();
       coralAutostopped = true;
     } else if (requestedAutoStopRelease == true) {
-      System.out.print("Coral Flume - Auto Released");
+      // System.out.print("Coral Flume - Auto Released");
       retractCoralStop();
       requestedAutoStopRelease = false;
       m_timer.reset();
     } else if (isCoralSensed() == false
         & coralStopped == false
         & m_coralStopper.get() == DoubleSolenoid.Value.kForward) {
-      System.out.print("Coral Flume - Mismatch Detected, Releasing");
+      // System.out.print("Coral Flume - Mismatch Detected, Releasing");
       retractCoralStop();
     }
   }
@@ -77,13 +77,13 @@ public class Coral extends SubsystemBase {
   }
 
   public void extendCoralStop() {
-    System.out.print("Coral Flume - Cylinder Extended");
+    // System.out.print("Coral Flume - Cylinder Extended");
     m_coralStopper.set(DoubleSolenoid.Value.kForward);
     coralStopped = true;
   }
 
   public void retractCoralStop() {
-    System.out.print("Coral Flume - Cylinder Released");
+    // System.out.print("Coral Flume - Cylinder Released");
     m_coralStopper.set(DoubleSolenoid.Value.kReverse);
     coralStopped = false;
     coralAutostopped = false;

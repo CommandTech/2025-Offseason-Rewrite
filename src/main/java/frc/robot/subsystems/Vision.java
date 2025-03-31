@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import java.io.IOException;
+import java.nio.file.Paths;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.cameraserver.CameraServer;
@@ -29,7 +30,9 @@ public class Vision extends SubsystemBase {
   private AprilTagFieldLayout fieldLayout;
   {
     try {
-      fieldLayout = new AprilTagFieldLayout("D:\\FRC Repos\\2025-Offseason\\2025-Offseason-Rewrite\\src\\main\\java\\frc\\apriltagmap\\2025-reefscape-welded.json");
+      fieldLayout = new AprilTagFieldLayout(
+          Paths.get("src", "main", "java", "frc", "apriltagmap", "2025-reefscape-welded.json").toAbsolutePath().toString()
+      );
       fieldLayout.setOrigin(new Pose3d(0,0,0, new Rotation3d()));
     } catch (IOException e) {
       e.printStackTrace();

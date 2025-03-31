@@ -101,6 +101,8 @@ public class Constants {
         public static final double FRONT_RIGHT_ANGULAR_OFFSET = 0;
         public static final double BACK_LEFT_ANGULAR_OFFSET = Math.PI;
         public static final double BACK_RIGHT_ANGULAR_OFFSET = Math.PI / 2;
+
+        public static final double POSE_TOLERANCE = Units.inchesToMeters(1);
     }
 
     public static final class VisionConstants {
@@ -269,6 +271,6 @@ public class Constants {
         public static final double CORAL_SENSE_THRESHOLD = 650;
         public static final double AUTO_CORAL_SENCE_DELAY = 3;
 
-        
+
     }
 }

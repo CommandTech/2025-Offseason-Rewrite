@@ -20,6 +20,7 @@ public class RobotContainer {
   private final Climber m_climber = new Climber();
   private final Coral m_coral = new Coral();
   private final Algae m_algae = new Algae();
+  AutoScorer m_autoScorer = new AutoScorer(m_coral, m_swerve, m_elevator);
 
   private SendableChooser<Command> m_chooser = new SendableChooser<>();
 

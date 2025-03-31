@@ -45,7 +45,9 @@ public class Drivetrain extends SubsystemBase {
   private Vision m_camera;
 
   private final AHRS m_gyro = new AHRS(NavXComType.kI2C);
-
+  
+  private Pose2d m_targetPose;
+  
   private final SwerveDriveKinematics m_kinematics =
       new SwerveDriveKinematics(
           DriveConstants.FRONT_LEFT_LOCATION, DriveConstants.FRONT_RIGHT_LOCATION, DriveConstants.BACK_LEFT_LOCATION, DriveConstants.BACK_RIGHT_LOCATION);
@@ -182,7 +184,12 @@ public class Drivetrain extends SubsystemBase {
     return runOnce(() -> drive(xSpeed, ySpeed, rot, true, 0.02));
   }
 
+  public Pose2d getTargetPose(){
+    return m_targetPose;
+  }
+
   public Command goToPose(Pose2d targetPose, boolean forAlgae){
+    m_targetPose = targetPose;
     // Create the constraints to use while pathfinding
     PathConstraints constraints = new PathConstraints(
             3.0, 4.0,

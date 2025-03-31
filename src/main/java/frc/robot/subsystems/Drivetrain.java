@@ -30,10 +30,25 @@ import frc.robot.Constants.GoalConstants;
 
 /** Represents a swerve drive style drivetrain. */
 public class Drivetrain extends SubsystemBase {
-  private final SwerveModule m_frontLeft = new SwerveModule(DriveConstants.FRONT_LEFT_DRIVE_MOTOR_ID, DriveConstants.FRONT_LEFT_TURN_MOTOR_ID, DriveConstants.FRONT_LEFT_ANGULAR_OFFSET);
-  private final SwerveModule m_frontRight = new SwerveModule(DriveConstants.FRONT_RIGHT_DRIVE_MOTOR_ID, DriveConstants.FRONT_RIGHT_TURN_MOTOR_ID, DriveConstants.FRONT_RIGHT_ANGULAR_OFFSET);
-  private final SwerveModule m_backLeft = new SwerveModule(DriveConstants.BACK_LEFT_DRIVE_MOTOR_ID, DriveConstants.BACK_LEFT_TURN_MOTOR_ID, DriveConstants.BACK_LEFT_ANGULAR_OFFSET);
-  private final SwerveModule m_backRight = new SwerveModule(DriveConstants.BACK_RIGHT_DRIVE_MOTOR_ID, DriveConstants.BACK_RIGHT_TURN_MOTOR_ID, DriveConstants.BACK_RIGHT_ANGULAR_OFFSET);
+  private final MAXSwerveModule m_frontLeft = new MAXSwerveModule(
+      DriveConstants.FRONT_LEFT_DRIVE_MOTOR_ID,
+      DriveConstants.FRONT_LEFT_TURN_MOTOR_ID,
+      DriveConstants.FRONT_LEFT_ANGULAR_OFFSET);
+
+  private final MAXSwerveModule m_frontRight = new MAXSwerveModule(
+      DriveConstants.FRONT_RIGHT_DRIVE_MOTOR_ID,
+      DriveConstants.FRONT_RIGHT_TURN_MOTOR_ID,
+      DriveConstants.FRONT_RIGHT_ANGULAR_OFFSET);
+
+  private final MAXSwerveModule m_backLeft = new MAXSwerveModule(
+      DriveConstants.BACK_LEFT_DRIVE_MOTOR_ID,
+      DriveConstants.BACK_LEFT_TURN_MOTOR_ID,
+      DriveConstants.BACK_LEFT_ANGULAR_OFFSET);
+
+  private final MAXSwerveModule m_backRight = new MAXSwerveModule(
+      DriveConstants.BACK_RIGHT_DRIVE_MOTOR_ID,
+      DriveConstants.BACK_RIGHT_TURN_MOTOR_ID,
+      DriveConstants.BACK_RIGHT_ANGULAR_OFFSET);
 
   public static final double kFrontLeftChassisAngularOffset = -Math.PI / 2;
   public static final double kFrontRightChassisAngularOffset = 0;
@@ -45,7 +60,7 @@ public class Drivetrain extends SubsystemBase {
   private Vision m_camera;
 
   private final AHRS m_gyro = new AHRS(NavXComType.kI2C);
-  
+
   private Pose2d m_targetPose;
   
   private final SwerveDriveKinematics m_kinematics =
@@ -119,13 +134,16 @@ public class Drivetrain extends SubsystemBase {
    */
   public void drive(
       double xSpeed, double ySpeed, double rot, boolean fieldRelative, double periodSeconds) {
+    double xSpeedDelivered = xSpeed * DriveConstants.MAX_SPEED;
+    double ySpeedDelivered = ySpeed * DriveConstants.MAX_SPEED;
+    double rotDelivered = rot * DriveConstants.MAX_ANGULAR_SPEED;
     var swerveModuleStates =
         m_kinematics.toSwerveModuleStates(
             ChassisSpeeds.discretize(
                 fieldRelative
                     ? ChassisSpeeds.fromFieldRelativeSpeeds(
-                        xSpeed, ySpeed, rot, m_gyro.getRotation2d())
-                    : new ChassisSpeeds(xSpeed, ySpeed, rot),
+                        xSpeedDelivered, ySpeedDelivered, rotDelivered, m_gyro.getRotation2d())
+                    : new ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered),
                 periodSeconds));
     SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, DriveConstants.MAX_SPEED);
     m_frontLeft.setDesiredState(swerveModuleStates[0]);

@@ -6,8 +6,6 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -17,8 +15,6 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.wpilibj.DriverStation;
-
-import java.io.IOException;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.PIDConstants;
@@ -31,7 +27,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.GoalConstants;
-import edu.wpi.first.apriltag.AprilTagFieldLayout;
 
 /** Represents a swerve drive style drivetrain. */
 public class Drivetrain extends SubsystemBase {
@@ -49,18 +44,6 @@ public class Drivetrain extends SubsystemBase {
   private RobotConfig config;
 
   private Vision m_camera;
-
-  //Might move to a vision subsystem if we get to that point
-  private AprilTagFieldLayout fieldLayout;
-  {
-    try {
-      fieldLayout = new AprilTagFieldLayout("D:\\FRC Repos\\2025-Offseason\\2025-Offseason-Rewrite\\src\\main\\java\\frc\\apriltagmap\\2025-reefscape-welded.json");
-      fieldLayout.setOrigin(new Pose3d(0,0,0, new Rotation3d()));
-    } catch (IOException e) {
-      e.printStackTrace();
-      fieldLayout = null;
-    }
-  }
 
   private final AHRS m_gyro = new AHRS(NavXComType.kI2C);
 

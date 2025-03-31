@@ -4,6 +4,9 @@
 
 package frc.robot.subsystems;
 
+import java.io.IOException;
+
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
@@ -21,6 +24,18 @@ public class Vision extends SubsystemBase {
   private NetworkTableEntry tl = table.getEntry("tl");
   private double[] botPoseBLUE = NetworkTableInstance.getDefault().getTable("limelight").getEntry("botPose_wpiblue").getDoubleArray(new double[6]);
   private Pose3d botPose3d = new Pose3d(botPoseBLUE[0],botPoseBLUE[1],botPoseBLUE[2],new Rotation3d(botPoseBLUE[3],botPoseBLUE[4],botPoseBLUE[5]));
+
+  //Might move to a vision subsystem if we get to that point
+  private AprilTagFieldLayout fieldLayout;
+  {
+    try {
+      fieldLayout = new AprilTagFieldLayout("D:\\FRC Repos\\2025-Offseason\\2025-Offseason-Rewrite\\src\\main\\java\\frc\\apriltagmap\\2025-reefscape-welded.json");
+      fieldLayout.setOrigin(new Pose3d(0,0,0, new Rotation3d()));
+    } catch (IOException e) {
+      e.printStackTrace();
+      fieldLayout = null;
+    }
+  }
 
   public Vision() {   
     CameraServer.startAutomaticCapture();
@@ -46,5 +61,9 @@ public class Vision extends SubsystemBase {
 
   public double getTimestamp(){
     return Timer.getFPGATimestamp() - (tl.getDouble(0) + 11) / 1000;
+  }
+
+  public AprilTagFieldLayout getFieldLayout(){
+    return fieldLayout;
   }
 }

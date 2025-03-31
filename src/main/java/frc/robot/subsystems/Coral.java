@@ -13,9 +13,9 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.CoralConstants;
 
 public class Coral extends SubsystemBase {
-  private AnalogInput m_CoralSense;
-  private DoubleSolenoid m_CoralStopper;
-  private Timer m_Timer;
+  private AnalogInput m_coralSense;
+  private DoubleSolenoid m_coralStopper;
+  private Timer m_timer;
   
   private boolean coralStopped = false;
   private boolean enableAutoStopCoral = true;
@@ -23,27 +23,27 @@ public class Coral extends SubsystemBase {
   private boolean requestedAutoStopRelease = false;
 
   public Coral() {
-    m_CoralStopper =
+    m_coralStopper =
         new DoubleSolenoid(
             CoralConstants.PH_CAN_ID,
             PneumaticsModuleType.REVPH,
             CoralConstants.CORAL_STOPPER_EXTEND_CHANNEL,
             CoralConstants.CORAL_STOPPER_RETRACT_CHANNEL);
-    m_CoralStopper.set(DoubleSolenoid.Value.kReverse);
+    m_coralStopper.set(DoubleSolenoid.Value.kReverse);
     coralStopped = false;
 
     // Setup Coral Sense Analog Port
-    m_CoralSense = new AnalogInput(CoralConstants.CORAL_SENSOR_ANALOG_PORT);
+    m_coralSense = new AnalogInput(CoralConstants.CORAL_SENSOR_ANALOG_PORT);
 
     // Init Timer
-    m_Timer = new Timer();
-    m_Timer.start();
+    m_timer = new Timer();
+    m_timer.start();
   }
 
   @Override
   public void periodic() {
     if (coralStopped == false & isCoralSensed() == true & isAutoStopEnabled() == true
-        && m_Timer.hasElapsed(CoralConstants.AUTO_CORAL_SENCE_DELAY)) {
+        && m_timer.hasElapsed(CoralConstants.AUTO_CORAL_SENCE_DELAY)) {
       System.out.print("Coral Flume - Auto Stopped");
       extendCoralStop();
       coralAutostopped = true;
@@ -51,17 +51,17 @@ public class Coral extends SubsystemBase {
       System.out.print("Coral Flume - Auto Released");
       retractCoralStop();
       requestedAutoStopRelease = false;
-      m_Timer.reset();
+      m_timer.reset();
     } else if (isCoralSensed() == false
         & coralStopped == false
-        & m_CoralStopper.get() == DoubleSolenoid.Value.kForward) {
+        & m_coralStopper.get() == DoubleSolenoid.Value.kForward) {
       System.out.print("Coral Flume - Mismatch Detected, Releasing");
       retractCoralStop();
     }
   }
 
   public boolean isCoralSensed() {
-    return m_CoralSense.getValue() <= CoralConstants.CORAL_SENSE_THRESHOLD;
+    return m_coralSense.getValue() <= CoralConstants.CORAL_SENSE_THRESHOLD;
   }
 
   public boolean isCoralAutoStopped() {
@@ -78,13 +78,13 @@ public class Coral extends SubsystemBase {
 
   public void extendCoralStop() {
     System.out.print("Coral Flume - Cylinder Extended");
-    m_CoralStopper.set(DoubleSolenoid.Value.kForward);
+    m_coralStopper.set(DoubleSolenoid.Value.kForward);
     coralStopped = true;
   }
 
   public void retractCoralStop() {
     System.out.print("Coral Flume - Cylinder Released");
-    m_CoralStopper.set(DoubleSolenoid.Value.kReverse);
+    m_coralStopper.set(DoubleSolenoid.Value.kReverse);
     coralStopped = false;
     coralAutostopped = false;
   }

@@ -30,7 +30,6 @@ import frc.robot.Constants.GoalConstants;
 
 /** Represents a swerve drive style drivetrain. */
 public class Drivetrain extends SubsystemBase {
-
   private final SwerveModule m_frontLeft = new SwerveModule(DriveConstants.FRONT_LEFT_DRIVE_MOTOR_ID, DriveConstants.FRONT_LEFT_TURN_MOTOR_ID, DriveConstants.FRONT_LEFT_ANGULAR_OFFSET);
   private final SwerveModule m_frontRight = new SwerveModule(DriveConstants.FRONT_RIGHT_DRIVE_MOTOR_ID, DriveConstants.FRONT_RIGHT_TURN_MOTOR_ID, DriveConstants.FRONT_RIGHT_ANGULAR_OFFSET);
   private final SwerveModule m_backLeft = new SwerveModule(DriveConstants.BACK_LEFT_DRIVE_MOTOR_ID, DriveConstants.BACK_LEFT_TURN_MOTOR_ID, DriveConstants.BACK_LEFT_ANGULAR_OFFSET);

@@ -45,7 +45,7 @@ public class RobotContainer {
     
     // Coral Flume Commands for the Manipulator
     m_manipController.leftBumper().onTrue(m_coral.autoLockRelease());
-    
+
     // Algae Holder Commands for the Manipulator
     m_manipController.rightBumper().onTrue(m_algae.toggleAlgaeHolder());
     

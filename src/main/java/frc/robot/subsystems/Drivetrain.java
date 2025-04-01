@@ -25,6 +25,7 @@ import com.studica.frc.AHRS;
 import com.studica.frc.AHRS.NavXComType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.ClimberConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.GoalConstants;
 
@@ -269,5 +270,19 @@ public class Drivetrain extends SubsystemBase {
     }
 
     return closestBranch;
+  }
+
+  public Command driveToCage(int cageNum){
+    switch (cageNum) {
+      case 1:
+        return runOnce(() -> goToPose(ClimberConstants.CAGE1_POSE, true));
+      case 2:
+        return runOnce(() -> goToPose(ClimberConstants.CAGE2_POSE, true));
+      case 3:
+        return runOnce(() -> goToPose(ClimberConstants.CAGE3_POSE, true));
+      default:
+        break;
+    }
+    return runOnce(() -> goToPose(getPose(), false));
   }
 }

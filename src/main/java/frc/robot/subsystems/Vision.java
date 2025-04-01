@@ -18,9 +18,6 @@ import frc.robot.Constants.VisionConstants;
 
 public class Vision extends SubsystemBase {
   private NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
-  private NetworkTableEntry tx = table.getEntry("tx");
-  private NetworkTableEntry ty = table.getEntry("ty");
-  private NetworkTableEntry ta = table.getEntry("ta");
   private NetworkTableEntry tv = table.getEntry("tv");
   private NetworkTableEntry tl = table.getEntry("tl");
   private double[] botPoseBLUE = NetworkTableInstance.getDefault().getTable("limelight").getEntry("botPose_wpiblue").getDoubleArray(new double[6]);

@@ -217,6 +217,11 @@ public class Constants {
         public static final int COMP_START_PRESSURE = 100;
         public static final int COMP_STOP_PRESSURE = 120;
         public static final int HIGH_SIDE_PRESSURE_SENSOR_ID = 0;
+
+        //Rotation should be whatever the robot needs to be in for the climber to be inside the cage
+        public static final Pose2d CAGE1_POSE = new Pose2d(0, 0, new Rotation2d());
+        public static final Pose2d CAGE2_POSE = new Pose2d(0, 0, new Rotation2d());
+        public static final Pose2d CAGE3_POSE = new Pose2d(0, 0, new Rotation2d());
     }
 
     public static final class AlgaeConstants {

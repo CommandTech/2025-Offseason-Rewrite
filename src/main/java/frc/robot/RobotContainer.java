@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.AlgaeConstants;
+import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.GoalConstants;
 import frc.robot.subsystems.*;
@@ -34,12 +35,22 @@ public class RobotContainer {
     SmartDashboard.putData(CommandScheduler.getInstance());
     SmartDashboard.putData("Autonomous", m_chooser);
 
+    SmartDashboard.putNumber("Drive P: ", DriveConstants.DRIVE_P);
+    SmartDashboard.putNumber("Drive I: ", DriveConstants.DRIVE_I);
+    SmartDashboard.putNumber("Drive D: ", DriveConstants.DRIVE_D);
+
+    SmartDashboard.putNumber("Turn P: ", DriveConstants.TURN_P);
+    SmartDashboard.putNumber("Turn I: ", DriveConstants.TURN_I);
+    SmartDashboard.putNumber("Turn D: ", DriveConstants.TURN_D);
     configureButtonBindings();
   }
 
   public void configureButtonBindings() {
     // Climb Commands
     m_driverController.leftTrigger(50).onTrue(m_climber.toggleClimber());
+    m_driverController.leftBumper().onTrue(m_swerve.driveToCage(m_climber.getCage()).andThen(() -> m_climber.toggleClimber()));
+    m_manipController.back().onTrue(m_climber.changeCage(-1));
+    m_manipController.start().onTrue(m_climber.changeCage(1));
 
     // Elevator Commands for the Manipulator
     m_manipController.povUp().onTrue(m_elevator.setElevatorHeight(ElevatorConstants.ELEVATOR_L3_HEIGHT));

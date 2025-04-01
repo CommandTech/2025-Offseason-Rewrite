@@ -1,5 +1,7 @@
 package frc.robot;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -27,8 +29,10 @@ public class RobotContainer {
   public RobotContainer() {
     m_swerve.setDefaultCommand(m_swerve.driveCommand(m_driverController.getLeftX(), m_driverController.getLeftY(), m_driverController.getRightX()));
     // m_swerve.setDefaultCommand(m_swerve.goToClosestReef(false));
+    
+    m_chooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData(CommandScheduler.getInstance());
-    SmartDashboard.putData("Auto Mode", m_chooser);
+    SmartDashboard.putData("Autonomous", m_chooser);
 
     configureButtonBindings();
   }

@@ -198,7 +198,7 @@ public class Drivetrain extends SubsystemBase {
 
     // Since AutoBuilder is configured, we can use it to build pathfinding commands
     Command pathfindingCommand = AutoBuilder.pathfindToPose(
-            forAlgae ? targetPose.plus(GoalConstants.ROBOT_ALGAE_OFFSET) : targetPose,
+            forAlgae ? targetPose.transformBy(GoalConstants.ROBOT_ALGAE_OFFSET) : targetPose,
             constraints
     );
     return pathfindingCommand;

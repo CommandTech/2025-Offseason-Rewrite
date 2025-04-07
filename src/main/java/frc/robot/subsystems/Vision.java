@@ -49,7 +49,7 @@ public class Vision extends SubsystemBase {
 
   public Pose3d getVisionPose(){
     //Adds the camera offset constant to the bot pose to correct for the location of the camera
-    return botPose3d.plus(VisionConstants.CAMERA_OFFSET);
+    return botPose3d.transformBy(VisionConstants.CAMERA_OFFSET);
   }
 
   private void updateVisionPose(){
